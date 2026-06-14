@@ -38,7 +38,7 @@ static void IRAM_ATTR gpio_isr_handler(void* arg)
 	}
 }
 
-void timer_callback(TimerHandle_t xTimer) 
+void led_timer_callback(TimerHandle_t xTimer) 
 {
     ESP_LOGI(TAG, "¡Han pasado 5 segundos! Ejecutando acción...");
 	gpio_set_level(BLINK_OUTPUT_GPIO, 0);
@@ -52,7 +52,7 @@ static void ui_manager_task(void* arg)
 			gpio_set_level(BLINK_OUTPUT_GPIO, 1);
 			if ( led_timer != NULL ) {
 				xTimerStart(led_timer, 0);
-				ESP_LOGI(TAG, "Timer iniciado correctamente.");
+				ESP_LOGI(TAG, "Led timer iniciado correctamente.");
 			}
 			else {
 				ESP_LOGE(TAG, "El timer se creó, pero falló al iniciar.");
@@ -70,7 +70,7 @@ void ui_manager_start(EventGroupHandle_t system_events) {
     gpio_set_direction(BLINK_OUTPUT_GPIO, GPIO_MODE_OUTPUT);
 
 	// Led timer
-	led_timer = xTimerCreate("LED_Timer", pdMS_TO_TICKS(LED_TIME), pdTRUE, NULL, timer_callback);
+	led_timer = xTimerCreate("LED_Timer", pdMS_TO_TICKS(LED_TIME), pdTRUE, NULL, led_timer_callback);
 
 	// Configuration for the button
 	gpio_config_t io_conf = {};

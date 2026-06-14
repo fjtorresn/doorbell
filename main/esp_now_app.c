@@ -18,7 +18,7 @@ static const char *TAG = "esp_now_app";
 
 static EventGroupHandle_t local_system_events = NULL;
 
-static uint8_t s_ring_mac[ESP_NOW_ETH_ALEN] = {0x10, 0x52, 0x1c, 0xa4, 0xcc, 0xc0};
+static uint8_t s_bell_mac[ESP_NOW_ETH_ALEN] = {0x10, 0x52, 0x1c, 0xa4, 0xcc, 0xc0};
 static uint8_t s_example_payload[4] = {'h', 'o', 'l', 'a'};
 
 
@@ -43,7 +43,7 @@ static void espnow_task(void *arg)
 	}
 
 	memset(data, 0, sizeof(espnow_data_t));
-	memcpy(data->dest_mac, s_ring_mac, ESP_NOW_ETH_ALEN);
+	memcpy(data->dest_mac, s_bell_mac, ESP_NOW_ETH_ALEN);
 	memcpy(data->payload, s_example_payload, ESPNOW_DATA_SIZE);
 	data->len = ESPNOW_DATA_SIZE;
 
@@ -77,7 +77,7 @@ static esp_err_t esp_now_app_init(void)
 	peer->channel = 0;
 	peer->ifidx = WIFI_IF_STA;
 	peer->encrypt = false;
-	memcpy(peer->peer_addr, s_ring_mac, ESP_NOW_ETH_ALEN);
+	memcpy(peer->peer_addr, s_bell_mac, ESP_NOW_ETH_ALEN);
 	ESP_ERROR_CHECK(esp_now_add_peer(peer));
 	free(peer);
 	return ESP_OK;
@@ -87,7 +87,7 @@ void esp_now_app_start(EventGroupHandle_t system_events)
 {
 	local_system_events = system_events;
 
-	xEventGroupWaitBits(local_system_events, WIFI_CONNECTED_BIT, pdTRUE, pdFALSE, portMAX_DELAY);
+	xEventGroupWaitBits(local_system_events, WIFI_CONNECTED_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
 
 	esp_now_app_init();
 

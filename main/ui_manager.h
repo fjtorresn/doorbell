@@ -12,7 +12,8 @@
 #define LED_TIME                5000
 
 #define BUTTON_INPUT_GPIO		18
-#define DEBOUNCE_TIME_MS		300
+//#define DEBOUNCE_TIME_MS		300
+#define DEBOUNCE_TIME_MS		5000
 
 #define ESP_INTR_FLAG_DEFAULT 	0
 
